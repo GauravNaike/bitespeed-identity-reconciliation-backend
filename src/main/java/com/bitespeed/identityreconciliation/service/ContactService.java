@@ -28,11 +28,11 @@ public class ContactService {
             throw new RuntimeException("At least one field is required");
         }
 
-        // 🔥 Step 1: Find all matching contacts (email OR phone)
+
         List<Contact> matches =
                 repository.findByEmailOrPhoneNumber(email, phone);
 
-        // ✅ CASE 1: No match → create primary
+
         if (matches.isEmpty()) {
 
             Contact newContact = Contact.builder()
@@ -49,7 +49,7 @@ public class ContactService {
             return buildResponse(newContact);
         }
 
-        // 🔥 Step 2: Collect full cluster
+
         Set<Contact> allContacts = new HashSet<>(matches);
 
         for (Contact contact : matches) {
@@ -69,13 +69,13 @@ public class ContactService {
             }
         }
 
-        // 🔥 Step 3: Find oldest primary
+
         Contact primary = allContacts.stream()
                 .filter(c -> "primary".equals(c.getLinkPrecedence()))
                 .min(Comparator.comparing(Contact::getCreatedAt))
                 .orElseThrow();
 
-        // 🔥 Step 4: Merge multiple primaries if needed
+
         for (Contact contact : allContacts) {
             if ("primary".equals(contact.getLinkPrecedence())
                     && !contact.getId().equals(primary.getId())) {
@@ -88,13 +88,13 @@ public class ContactService {
             }
         }
 
-        // 🔥 Step 5: Check if exact combination exists
+
         boolean alreadyExists = allContacts.stream().anyMatch(c ->
                 Objects.equals(c.getEmail(), email) &&
                         Objects.equals(c.getPhoneNumber(), phone)
         );
 
-        // 🔥 Step 6: Create secondary if new info
+
         if (!alreadyExists) {
 
             Contact secondary = Contact.builder()
