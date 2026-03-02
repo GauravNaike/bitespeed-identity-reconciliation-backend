@@ -66,5 +66,15 @@ http://localhost:8080
 
 ---
 
+## 🌍 Live API
+
+Base URL:
+https://bitespeed-backend-e8s5.onrender.com
+
+Endpoint:
+POST /identify
+
+---
+
 ## 👨‍💻 Author
 **Gaurav Naike**
